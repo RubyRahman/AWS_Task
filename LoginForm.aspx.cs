@@ -22,9 +22,8 @@ namespace AWS_Task
                 {
 
                     dbconn.Open();
-                    string qry= "select * from CompanyTable";
-                   SqlCommand cmd = new SqlCommand(qry, dbconn);
-                   
+                   SqlCommand cmd = new SqlCommand("spGetCompany", dbconn);
+                   cmd.CommandType=System.Data.CommandType.StoredProcedure;
                     drp_companyname.DataSource = cmd.ExecuteReader();
                     drp_companyname.DataTextField = "companyname";
                     drp_companyname.DataValueField = "company_id";
@@ -40,8 +39,8 @@ namespace AWS_Task
          using(SqlConnection dbconn=new SqlConnection(cs))
             {
                 dbconn.Open();
-                string uqry = "select count(*) from LoginTable where username=@username and password=@password";
-                SqlCommand cmd = new SqlCommand(uqry,dbconn);
+                SqlCommand cmd = new SqlCommand("spGetEmp_count",dbconn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@username",txt_username.Text) ;
                 cmd.Parameters.AddWithValue("@password",txtpswd.Text);
                 int temp = Convert.ToInt32(cmd.ExecuteScalar().ToString());
@@ -52,8 +51,8 @@ namespace AWS_Task
                         if (drp_companyname.SelectedIndex > 0)
                         {
                             dbconn.Open();
-                            string companyqry = "select count(emp_id) from LoginTable where username=@username and password=@password and company_id =@company_id";
-                            SqlCommand companycmd = new SqlCommand(companyqry, dbconn);
+                        SqlCommand companycmd = new SqlCommand("spGetEmp_id", dbconn);
+                        companycmd.CommandType = System.Data.CommandType.StoredProcedure;
                         companycmd.Parameters.AddWithValue("@username", txt_username.Text);
                         companycmd.Parameters.AddWithValue("@password", txtpswd.Text);
                         companycmd.Parameters.AddWithValue("@company_id",drp_companyname.SelectedValue);
